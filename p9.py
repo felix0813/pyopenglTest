@@ -439,10 +439,6 @@ while not glfw.window_should_close(window):
 
     for i in range(k_size):
         if i not in right_arm and i not in left_arm:
-            '''if(i==0):
-                x = glGenTextures(1)
-                texture = TextureLoader.load_texture('X:\pyopenglTest\\textures\ground.jpg', x)
-                background2(texture)'''
             draw(VAO[i], model, model_loc, indices[i])
 
     leftBigHandMatrix = matrixMulpiple([
