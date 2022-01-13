@@ -287,23 +287,8 @@ model = pyrr.matrix44.multiply(rot_z, scale)
 cj0 = pyrr.Vector4([0, 10.5, 0, 1.0])
 
 
-def background2(_texture):
-    try:
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glEnable(GL_COLOR_MATERIAL)
-        glBegin(GL_QUADS)
-        glColor4f(0.25, 0.25, 0.25, 0.8)
-        glVertex3d(-256, -256, 0)
-        glColor4f(0.25, 0.25, 0.25, 0.8)
-        glVertex3d(256, -256, 0)
-        glColor4f(0.25, 0.25, 0.25, 0.8)
-        glVertex3d(256, 256, 0)
-        glColor4f(0.25, 0.25, 0.25, 0.8)
-        glVertex3d(-256, 256, 0)
-        glEnd()
-        glFlush()
-    except Exception as e:
-        print(e)
+def background2():
+    glBegin(GL_SPECULAR)
 
 
 def background():
@@ -312,68 +297,68 @@ def background():
 
     glBegin(GL_QUADS)
     # glTexCoord2d(0, 0)
-    glVertex3d(0, 0, 0)
+    glVertex3d(-250, 0, 200)
     # glTexCoord2d(1, 0)
-    glVertex3d(500, 0, 0)
+    glVertex3d(250, 0, 200)
     # glTexCoord2d(1, 1)
-    glVertex3d(500, 500, 0)
+    glVertex3d(260, 500, 200)
     # glTexCoord2d(0, 1)
-    glVertex3d(0, 500, 0)
+    glVertex3d(-250, 500, 200)
     glEnd()
 
     glBegin(GL_QUADS)
     glTexCoord2d(0, 0)
-    glVertex3d(0, 0, 500)
+    glVertex3d(-250, 0, 700)
     glTexCoord2d(1, 0)
-    glVertex3d(500, 0, 500)
+    glVertex3d(250, 0, 700)
     glTexCoord2d(1, 1)
-    glVertex3d(500, 500, 500)
+    glVertex3d(250, 500, 700)
     glTexCoord2d(0, 1)
-    glVertex3d(0, 500, 500)
+    glVertex3d(-250, 500, 700)
     glEnd()
 
     glBegin(GL_QUADS)
     glTexCoord2d(0, 0)
-    glVertex3d(0, 0, 0)
+    glVertex3d(-250, 0, 200)
     glTexCoord2d(1, 0)
-    glVertex3d(500, 0, 0)
+    glVertex3d(250, 0, 200)
     glTexCoord2d(1, 1)
-    glVertex3d(500, 0, 500)
+    glVertex3d(250, 0, 700)
     glTexCoord2d(0, 1)
-    glVertex3d(0, 0, 500)
+    glVertex3d(-250, 0, 700)
     glEnd()
 
     glBegin(GL_QUADS)
     glTexCoord2d(0, 0)
-    glVertex3d(0, 500, 0)
+    glVertex3d(-250, 500, 200)
     glTexCoord2d(1, 0)
-    glVertex3d(500, 500, 0)
+    glVertex3d(250, 500, 200)
     glTexCoord2d(1, 1)
-    glVertex3d(500, 500, 500)
+    glVertex3d(250, 500, 700)
     glTexCoord2d(0, 1)
-    glVertex3d(0, 500, 500)
+    glVertex3d(-250, 500, 700)
     glEnd()
 
     glBegin(GL_QUADS)
     glTexCoord2d(0, 0)
-    glVertex3d(0, 0, 0)
+    glVertex3d(-250, 0, 200)
     glTexCoord2d(1, 0)
-    glVertex3d(0, 500, 0)
+    glVertex3d(-250, 500, 200)
     glTexCoord2d(1, 1)
-    glVertex3d(0, 500, 500)
+    glVertex3d(-250, 500, 700)
     glTexCoord2d(0, 1)
-    glVertex3d(0, 0, 500)
+    glVertex3d(-250, 0, 700)
     glEnd()
 
     glBegin(GL_QUADS)
     glTexCoord2d(0, 0)
-    glVertex3d(500, 0, 0)
+    glVertex3d(250, 0, 200)
     glTexCoord2d(1, 0)
-    glVertex3d(500, 500, 0)
+    glVertex3d(250, 500, 200)
     glTexCoord2d(1, 1)
-    glVertex3d(500, 500, 500)
+    glVertex3d(250, 500, 700)
     glTexCoord2d(0, 1)
-    glVertex3d(500, 0, 500)
+    glVertex3d(250, 0, 700)
     glEnd()
 
 
@@ -411,7 +396,7 @@ while not glfw.window_should_close(window):
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     # load_material('model/' + 'mask1' + '.obj')
-    # background()
+    background()
     #     camX = math.sin(glfw.get_time()) * 20
     #     camZ = math.cos(glfw.get_time()) * 20
     #
@@ -465,9 +450,11 @@ while not glfw.window_should_close(window):
     for i in range(0, 3):
         draw(VAO[right_arm[i]], pyrr.matrix44.multiply(model, rightBigHandMatrix), model_loc, indices[right_arm[i]])
     # draw(VAO[right_arm[2]], pyrr.matrix44.multiply(rightBigHandMatrix, model), model_loc, indices[right_arm[2]])
+
     result = matrixMulpiple([pyrr.matrix44.create_from_translation(pyrr.Vector3([0, -13.5, 0])),
                              pyrr.matrix44.create_from_axis_rotation(pyrr.Vector3([5.0, 0, 0]), -0.98 * rot),
                              pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 13.5, 0])), ])
+
     center = pyrr.matrix44.apply_to_vector(result, cj0)
 
     leftSmallHandMatrix = matrixMulpiple([
@@ -507,6 +494,16 @@ while not glfw.window_should_close(window):
     #     pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 7.5-fall*0.7, fall/1.2]))
     # ])
     # draw(VAO, BallMatrix, model_loc, indices)
+
+    leftBigHandMatrix = matrixMulpiple([
+        # pyrr.matrix44.create_from_scale(pyrr.Vector3([0.5, 5, 0.5])),
+        model,
+        pyrr.matrix44.create_from_translation(pyrr.Vector3([0, -13.5, 0])),
+        pyrr.matrix44.create_from_axis_rotation(pyrr.Vector3([5.0, 1.0, 0]), -1 * rot),
+        pyrr.matrix44.create_from_axis_rotation(pyrr.Vector3([0, 0, 5.0]), -0.1 * rot),
+        pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 13.5, 0])),
+        # pyrr.matrix44.create_from_translation(pyrr.Vector3([-1.5, 3.5, 0]))
+    ])
 
     for i in range(6, 9):
         draw(VAO[left_arm[i]], leftBigHandMatrix, model_loc, indices[left_arm[i]])

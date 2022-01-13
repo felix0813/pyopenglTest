@@ -34,98 +34,65 @@ class ObjLoader:
             glEnd()
 
     @staticmethod
-    def vertex_clustering_simplify(file):
-
+    def vertex_clustering_simplify(file, out_file):
         vertexes = []
         faces = []
         with open(file, mode='r', encoding='utf-8') as f:
-            line = f.readline()
-            while line:
-                values = line.split()
-                if values == [] or values[0] == "#" or values[0] == "vt":
-                    line = f.readline()
-                    continue
-                if values[0] == "v":
-                    vertex = Vertex(values[1], values[2], values[3])
-                    vertex.x = float(values[1])
-                    vertex.y = float(values[2])
-                    vertex.z = float(values[3])
-                    '''print(vertex.x)
-                    print(vertex.y)
-                    print(vertex.z)'''
-                    vertexes.append(vertex)
-                elif values[0] == "f":
-                    face = Face(values[1].split('/')[0], values[2].split('/')[0], values[3].split('/')[0])
-                    face.v1 = int(values[1].split('/')[0])
-                    face.v2 = int(values[2].split('/')[0])
-                    face.v3 = int(values[3].split('/')[0])
-                    faces.append(face)
+            with open("newModel/"+out_file, mode='w', encoding='utf-8') as newFile:
                 line = f.readline()
-        new_faces = []
-        new_vertex_dict = {}
-        old_to_new_dict = {}
-        new_face_set = set()
-        count = 0
-        for vertex in vertexes:
-            count = count + 1
-            x = math.floor(vertex.x)
-            y = math.floor(vertex.y)
-            z = math.floor(vertex.z)
-            new_vertex_str = str(x) + str(y) + str(z)
-            # print(str(vertex.x) + str(vertex.y) + str(vertex.z))
-            # print(new_vertex_str)
-            if new_vertex_dict.get(new_vertex_str, -1) == -1:
-                # new_faces.append(Face(x, y, z))
-                new_vertex_dict[new_vertex_str] = len(new_vertex_dict) + 1
-                old_to_new_dict[count] = len(new_vertex_dict)
-            else:
-                old_to_new_dict[count] = new_vertex_dict[new_vertex_str]
-            # print(str(count) + " " + str(old_to_new_dict[count]))
-        print(str(len(old_to_new_dict)) + " " + str(len(new_vertex_dict)))
-        for face in faces:
-            new_face = Face(old_to_new_dict[face.v1], old_to_new_dict[face.v2],
-                            old_to_new_dict[face.v3])  # to be finished
-            new_face.v1 = old_to_new_dict[face.v1]
-            new_face.v2 = old_to_new_dict[face.v2]
-            new_face.v3 = old_to_new_dict[face.v3]
-            new_face_str = str(new_face.v1) + str(new_face.v2) + str(new_face.v3)
-            if new_face_str not in new_face_set:
-                new_face_set.add(new_face_str)
-                if new_face.v1 != new_face.v2 and new_face.v1 != new_face.v3 and new_face.v2 != new_face.v3:
-                    # if not new_face.v1 == new_face.v2 == new_face.v3:
-                    new_faces.append(new_face)
-        '''for face in new_faces:
-            print(str(face.v1) + " " + str(face.v2) + " " + str(face.v3) + "\n")'''
-        print(str(len(faces)) + " " + str(len(new_faces)) + " " + str(
-            float(len(faces) - len(new_faces)) / float(len(faces))))
+                while line:
+                    values = line.split()
+                    if values == [] or values[0] == "#" or values[0] == "vt":
+                        line = f.readline()
+                        continue
+                    if values[0] == "v":
+                        vertex = Vertex(values[1], values[2], values[3])
+                        vertex.x = float(values[1])
+                        vertex.y = float(values[2])
+                        vertex.z = float(values[3])
+                        vertexes.append(vertex)
+                    elif values[0] == "f":
+                        face = Face(values[1].split('/')[0], values[2].split('/')[0], values[3].split('/')[0])
+                        face.v1 = int(values[1].split('/')[0])
+                        face.v2 = int(values[2].split('/')[0])
+                        face.v3 = int(values[3].split('/')[0])
+                        faces.append(face)
+                    line = f.readline()
+                new_faces = []
+                new_vertex_dict = {}
+                old_to_new_dict = {}
+                new_face_set = set()
+                count = 0
+                for vertex in vertexes:
+                    count = count + 1
+                    x = math.floor(vertex.x)
+                    y = math.floor(vertex.y)
+                    z = math.floor(vertex.z)
+                    new_vertex_str = str(x*137) + str(y*149) + str(z*163)
+                    if new_vertex_dict.get(new_vertex_str, -1) == -1:
+                        new_vertex_dict[new_vertex_str] = len(new_vertex_dict) + 1
+                        old_to_new_dict[count] = len(new_vertex_dict)
+                        newFile.write("v " + str(x) + " " + str(y) + " " + str(z) + "\n")
+                    else:
+                        old_to_new_dict[count] = new_vertex_dict[new_vertex_str]
+                print(str(len(old_to_new_dict)) + " " + str(len(new_vertex_dict)))
+                for face in faces:
+                    new_face = Face(old_to_new_dict[face.v1], old_to_new_dict[face.v2],
+                                    old_to_new_dict[face.v3]) 
+                    new_face.v1 = old_to_new_dict[face.v1]
+                    new_face.v2 = old_to_new_dict[face.v2]
+                    new_face.v3 = old_to_new_dict[face.v3]
+                    new_face_str = str(new_face.v1) + str(new_face.v2) + str(new_face.v3)
+                    if new_face_str not in new_face_set:
+                        new_face_set.add(new_face_str)
+                        #if new_face.v1 != new_face.v2 and new_face.v1 != new_face.v3 and new_face.v2 != new_face.v3:
+                        if not new_face.v1 == new_face.v2 == new_face.v3:
+                            new_faces.append(new_face)
+                            newFile.write(
+                                "f " + str(new_face.v1) + " " + str(new_face.v2) + " " + str(new_face.v3) + "\n")
+                print(str(len(faces)) + " " + str(len(new_faces)) + " " + str(
+                    float(len(faces) - len(new_faces)) / float(len(faces))))
 
-    @staticmethod
-    def loop_subdivision(file):
-        vertexes = []
-        faces = []
-        with open(file, mode='r', encoding='utf-8') as f:
-            line = f.readline()
-            while line:
-                values = line.split()
-                if values == [] or values[0] == "#" or values[0] == "vt":
-                    line = f.readline()
-                    continue
-                if values[0] == "v":
-                    vertex = Vertex(values[1], values[2], values[3])
-                    vertex.x = float(values[1])
-                    vertex.y = float(values[2])
-                    vertex.z = float(values[3])
-                    '''print(vertex.x)
-                    print(vertex.y)
-                    print(vertex.z)'''
-                    vertexes.append(vertex)
-                elif values[0] == "f":
-                    face = Face(values[1].split('/')[0], values[2].split('/')[0], values[3].split('/')[0])
-                    face.v1 = int(values[1].split('/')[0])
-                    face.v2 = int(values[2].split('/')[0])
-                    face.v3 = int(values[3].split('/')[0])
-                    faces.append(face)
-                line = f.readline()
 
     @staticmethod
     def search_data(data_values, coordinates, skip, data_type):

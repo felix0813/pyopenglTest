@@ -223,18 +223,12 @@ def switch_nums(point_nums):
 
 def loop_subdiv(input_points, input_faces):
     edges_faces = get_edges_faces(input_points, input_faces)
-
     faces_points = get_faces_points(input_points, input_faces, edges_faces)
-    # print(len(faces_points))
     edge_points = get_edge_points(edges_faces, faces_points)
-
     print(edge_points)
     points_faces = get_points_faces(input_points, input_faces)
-
     face_sum = get_face_sum(input_points, input_faces)
-
     new_points = get_new_points(input_points, points_faces, face_sum)
-
     next_pointnum = len(new_points)
     edge_point_nums = dict()
 
