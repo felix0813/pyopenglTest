@@ -382,10 +382,10 @@ def load_material(file):
                 line = f.readline()
                 continue
             if values[0] == "v":
-                vertex = Vertex(values[1], values[2], values[3])
+                vertex = Vertex(float(values[1]), float(values[2]), float(values[3]))
                 vertexes.append(vertex)
             elif values[0] == "f":
-                face = Face(values[1].split('/')[0], values[2].split('/')[0], values[3].split('/')[0])
+                face = Face(int(values[1]), int(values[2]), int(values[3]))
                 faces.append(face)
             line = f.readline()
     for face in faces:
@@ -404,6 +404,7 @@ while not glfw.window_should_close(window):
     view = cam.get_view_matrix()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    load_material('newModel/' + 'target' + '.obj')
     # load_material('model/' + 'mask1' + '.obj')
     # background()
     #     camX = math.sin(glfw.get_time()) * 20

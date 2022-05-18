@@ -3,12 +3,11 @@
 # -------------------------------------------
 # quidam_02.py 旋转、缩放、改变视点和参考点
 # -------------------------------------------
-import time
 
+import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
-import numpy as np
 
 IS_PERSPECTIVE = True  # 透视投影
 VIEW = np.array([-0.8, 0.8, -0.8, 0.8, 1.0, 20.0])  # 视景体的left/right/bottom/top/near/far六个面
@@ -21,7 +20,7 @@ LEFT_IS_DOWNED = False  # 鼠标左键被按下
 MOUSE_X, MOUSE_Y = 0, 0  # 考察鼠标位移量时保存的起始位置
 
 
-def getposture():
+def get_posture():
     global EYE, LOOK_AT
 
     dist = np.sqrt(np.power((EYE - LOOK_AT), 2).sum())
@@ -35,7 +34,7 @@ def getposture():
     return dist, phi, theta
 
 
-DIST, PHI, THETA = getposture()  # 眼睛与观察目标之间的距离、仰角、方位角
+DIST, PHI, THETA = get_posture()  # 眼睛与观察目标之间的距离、仰角、方位角
 
 
 def init():
@@ -156,7 +155,7 @@ def mouseclick(button, state, x, y):
         glutPostRedisplay()
 
 
-def mousemotion(x, y):
+def mouse_motion(x, y):
     global LEFT_IS_DOWNED
     global EYE, EYE_UP
     global MOUSE_X, MOUSE_Y
@@ -186,7 +185,7 @@ def mousemotion(x, y):
         glutPostRedisplay()
 
 
-def keydown(key, x, y):
+def key_down(key, x, y):
     global DIST, PHI, THETA
     global EYE, LOOK_AT, EYE_UP
     global IS_PERSPECTIVE, VIEW
@@ -205,15 +204,15 @@ def keydown(key, x, y):
         elif key == b'Z':  # 瞄准参考点 z 增大
             LOOK_AT[2] += 0.01
 
-        DIST, PHI, THETA = getposture()
+        DIST, PHI, THETA = get_posture()
         glutPostRedisplay()
     elif key == b'\r':  # 回车键，视点前进
         EYE = LOOK_AT + (EYE - LOOK_AT) * 0.9
-        DIST, PHI, THETA = getposture()
+        DIST, PHI, THETA = get_posture()
         glutPostRedisplay()
     elif key == b'\x08':  # 退格键，视点后退
         EYE = LOOK_AT + (EYE - LOOK_AT) * 1.1
-        DIST, PHI, THETA = getposture()
+        DIST, PHI, THETA = get_posture()
         glutPostRedisplay()
     elif key == b' ':  # 空格键，切换投影模式
         IS_PERSPECTIVE = not IS_PERSPECTIVE
@@ -233,7 +232,7 @@ if __name__ == "__main__":
     glutDisplayFunc(draw)  # 注册回调函数draw()
     glutReshapeFunc(reshape)  # 注册响应窗口改变的函数reshape()
     glutMouseFunc(mouseclick)  # 注册响应鼠标点击的函数mouseclick()
-    glutMotionFunc(mousemotion)  # 注册响应鼠标拖拽的函数mousemotion()
-    glutKeyboardFunc(keydown)  # 注册键盘输入的函数keydown()
+    glutMotionFunc(mouse_motion)  # 注册响应鼠标拖拽的函数mousemotion()
+    glutKeyboardFunc(key_down)  # 注册键盘输入的函数keydown()
 
     glutMainLoop()  # 进入glut主循环

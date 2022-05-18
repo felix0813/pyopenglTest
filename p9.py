@@ -192,6 +192,106 @@ def draw(VAO, matrix, model_loc, indices):
     glDrawArrays(GL_TRIANGLES, 0, len(indices))
 
 
+def background2():
+    glBegin(GL_SPECULAR)
+
+
+def background():
+    # glEnable(GL_TEXTURE_2D)
+    # glBindTexture(GL_TEXTURE_2D, _texture)
+
+    glBegin(GL_QUADS)
+    # glTexCoord2d(0, 0)
+    glVertex3d(-250, 0, 200)
+    # glTexCoord2d(1, 0)
+    glVertex3d(250, 0, 200)
+    # glTexCoord2d(1, 1)
+    glVertex3d(260, 500, 200)
+    # glTexCoord2d(0, 1)
+    glVertex3d(-250, 500, 200)
+    glEnd()
+
+    glBegin(GL_QUADS)
+    glTexCoord2d(0, 0)
+    glVertex3d(-250, 0, 700)
+    glTexCoord2d(1, 0)
+    glVertex3d(250, 0, 700)
+    glTexCoord2d(1, 1)
+    glVertex3d(250, 500, 700)
+    glTexCoord2d(0, 1)
+    glVertex3d(-250, 500, 700)
+    glEnd()
+
+    glBegin(GL_QUADS)
+    glTexCoord2d(0, 0)
+    glVertex3d(-250, 0, 200)
+    glTexCoord2d(1, 0)
+    glVertex3d(250, 0, 200)
+    glTexCoord2d(1, 1)
+    glVertex3d(250, 0, 700)
+    glTexCoord2d(0, 1)
+    glVertex3d(-250, 0, 700)
+    glEnd()
+
+    glBegin(GL_QUADS)
+    glTexCoord2d(0, 0)
+    glVertex3d(-250, 500, 200)
+    glTexCoord2d(1, 0)
+    glVertex3d(250, 500, 200)
+    glTexCoord2d(1, 1)
+    glVertex3d(250, 500, 700)
+    glTexCoord2d(0, 1)
+    glVertex3d(-250, 500, 700)
+    glEnd()
+
+    glBegin(GL_QUADS)
+    glTexCoord2d(0, 0)
+    glVertex3d(-250, 0, 200)
+    glTexCoord2d(1, 0)
+    glVertex3d(-250, 500, 200)
+    glTexCoord2d(1, 1)
+    glVertex3d(-250, 500, 700)
+    glTexCoord2d(0, 1)
+    glVertex3d(-250, 0, 700)
+    glEnd()
+
+    glBegin(GL_QUADS)
+    glTexCoord2d(0, 0)
+    glVertex3d(250, 0, 200)
+    glTexCoord2d(1, 0)
+    glVertex3d(250, 500, 200)
+    glTexCoord2d(1, 1)
+    glVertex3d(250, 500, 700)
+    glTexCoord2d(0, 1)
+    glVertex3d(250, 0, 700)
+    glEnd()
+
+
+def load_material(file):
+    vertexes = []
+    faces = []
+    with open(file, mode='r', encoding='utf-8') as f:
+        line = f.readline()
+        while line:
+            values = line.split()
+            if values == [] or values[0] == "#" or values[0] == "vt":
+                line = f.readline()
+                continue
+            if values[0] == "v":
+                vertex = Vertex(float(values[1]), float(values[2]), float(values[3]))
+                vertexes.append(vertex)
+            elif values[0] == "f":
+                face = Face(int(values[1]), int(values[2]), int(values[3]))
+                faces.append(face)
+            line = f.readline()
+    for face in faces:
+        glBegin(GL_TRIANGLES)
+        glVertex3f(vertexes[face.v1 - 1].x, vertexes[face.v1 - 1].y, vertexes[face.v1 - 1].z)
+        glVertex3f(vertexes[face.v2 - 1].x, vertexes[face.v2 - 1].y, vertexes[face.v2 - 1].z)
+        glVertex3f(vertexes[face.v3 - 1].x, vertexes[face.v3 - 1].y, vertexes[face.v3 - 1].z)
+        glEnd()
+
+
 if not glfw.init():
     raise Exception("glfw init warning")
 
@@ -286,107 +386,6 @@ rot_z = pyrr.matrix44.create_from_x_rotation(3.14 / 2)
 model = pyrr.matrix44.multiply(rot_z, scale)
 cj0 = pyrr.Vector4([0, 10.5, 0, 1.0])
 
-
-def background2():
-    glBegin(GL_SPECULAR)
-
-
-def background():
-    # glEnable(GL_TEXTURE_2D)
-    # glBindTexture(GL_TEXTURE_2D, _texture)
-
-    glBegin(GL_QUADS)
-    # glTexCoord2d(0, 0)
-    glVertex3d(-250, 0, 200)
-    # glTexCoord2d(1, 0)
-    glVertex3d(250, 0, 200)
-    # glTexCoord2d(1, 1)
-    glVertex3d(260, 500, 200)
-    # glTexCoord2d(0, 1)
-    glVertex3d(-250, 500, 200)
-    glEnd()
-
-    glBegin(GL_QUADS)
-    glTexCoord2d(0, 0)
-    glVertex3d(-250, 0, 700)
-    glTexCoord2d(1, 0)
-    glVertex3d(250, 0, 700)
-    glTexCoord2d(1, 1)
-    glVertex3d(250, 500, 700)
-    glTexCoord2d(0, 1)
-    glVertex3d(-250, 500, 700)
-    glEnd()
-
-    glBegin(GL_QUADS)
-    glTexCoord2d(0, 0)
-    glVertex3d(-250, 0, 200)
-    glTexCoord2d(1, 0)
-    glVertex3d(250, 0, 200)
-    glTexCoord2d(1, 1)
-    glVertex3d(250, 0, 700)
-    glTexCoord2d(0, 1)
-    glVertex3d(-250, 0, 700)
-    glEnd()
-
-    glBegin(GL_QUADS)
-    glTexCoord2d(0, 0)
-    glVertex3d(-250, 500, 200)
-    glTexCoord2d(1, 0)
-    glVertex3d(250, 500, 200)
-    glTexCoord2d(1, 1)
-    glVertex3d(250, 500, 700)
-    glTexCoord2d(0, 1)
-    glVertex3d(-250, 500, 700)
-    glEnd()
-
-    glBegin(GL_QUADS)
-    glTexCoord2d(0, 0)
-    glVertex3d(-250, 0, 200)
-    glTexCoord2d(1, 0)
-    glVertex3d(-250, 500, 200)
-    glTexCoord2d(1, 1)
-    glVertex3d(-250, 500, 700)
-    glTexCoord2d(0, 1)
-    glVertex3d(-250, 0, 700)
-    glEnd()
-
-    glBegin(GL_QUADS)
-    glTexCoord2d(0, 0)
-    glVertex3d(250, 0, 200)
-    glTexCoord2d(1, 0)
-    glVertex3d(250, 500, 200)
-    glTexCoord2d(1, 1)
-    glVertex3d(250, 500, 700)
-    glTexCoord2d(0, 1)
-    glVertex3d(250, 0, 700)
-    glEnd()
-
-
-def load_material(file):
-    vertexes = []
-    faces = []
-    with open(file, mode='r', encoding='utf-8') as f:
-        line = f.readline()
-        while line:
-            values = line.split()
-            if values == [] or values[0] == "#" or values[0] == "vt":
-                line = f.readline()
-                continue
-            if values[0] == "v":
-                vertex = Vertex(values[1], values[2], values[3])
-                vertexes.append(vertex)
-            elif values[0] == "f":
-                face = Face(values[1].split('/')[0], values[2].split('/')[0], values[3].split('/')[0])
-                faces.append(face)
-            line = f.readline()
-    for face in faces:
-        glBegin(GL_TRIANGLES)
-        glVertex3f(vertexes[face.v1 - 1].x, vertexes[face.v1 - 1].y, vertexes[face.v1 - 1].z)
-        glVertex3f(vertexes[face.v2 - 1].x, vertexes[face.v2 - 1].y, vertexes[face.v2 - 1].z)
-        glVertex3f(vertexes[face.v3 - 1].x, vertexes[face.v3 - 1].y, vertexes[face.v3 - 1].z)
-        glEnd()
-
-
 while not glfw.window_should_close(window):
 
     # 让鼠标可以用
@@ -395,8 +394,8 @@ while not glfw.window_should_close(window):
     view = cam.get_view_matrix()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    # load_material('model/' + 'mask1' + '.obj')
-    background()
+    load_material('newModel/' + 'target' + '.obj')
+    # background()
     #     camX = math.sin(glfw.get_time()) * 20
     #     camZ = math.cos(glfw.get_time()) * 20
     #

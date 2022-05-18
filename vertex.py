@@ -4,6 +4,6 @@ class Vertex:
     z = 0.00
 
     def __init__(self, a, b, c):
-        x = a
-        y = b
-        z = c
+        self.x = a
+        self.y = b
+        self.z = c
